@@ -1,0 +1,78 @@
+void Protego(int *p,char name[10])                          //盔甲护身
+{
+    *p+=500;
+    printf("%s: Protego!\n",name);
+    printf("shield_value+500\n");
+}
+
+ void Incendio(int *p,char name[10])                        //火焰熊熊（每回合造成伤害）
+ {
+     *p-=1000;
+     printf("%s: Incendio!\n",name);
+     printf("blood_value-1000\n");
+ }
+
+ void Wingardium_Leviosa(int *p,char name[10])             //除你武器（0对应的数无效果）
+ {
+     *p=0;
+     printf("%s: Wingardium Leviosa!\n",name);
+     printf("Lord Voldemort stop two rounds");
+ }
+
+void Sectumsempra(int *p,char name[10])                   //神锋无影
+{
+    int i=0;
+    printf("%s: Sectumsempra!\n",name);
+    for(;i<5;i++)
+    {
+        *p-=500;
+        printf("blood_value-500\n");
+    }
+}
+
+void  Episkey(int *p,char name[10])                      //愈合如初
+{
+    *p+=300;
+    printf("%s: Episkey!\n",name);
+    printf("blood_value+300\n");
+}
+
+void Oppugno(int *p,char name[10])
+{
+    int i=0,j=100;
+    printf("%s; Oppugno!\n",name);
+    for(;i<8;i++)
+    {
+        p-=j;
+        j+=50;
+        printf("blood_value-%d\n",j);
+    }
+}
+
+
+
+
+
+
+void Crucio(int *p)                               //钻心剜骨
+{
+    int i=0;
+    for(;i<3;i++)
+    {
+        *p-=100;
+        printf("Lord Voldemort: Crucio!\n");
+        printf("blood_value-100\n");
+    }
+}
+
+void Avada_Kedavra(int *p)                        //啃大瓜
+{
+    *p-=500;
+    printf("Lord Voldemort: Avada Kedavra!\n");
+    printf("blood_value-500\n");
+}
+
+void Imperio(int *p)                              //魂魄出窍
+{
+    printf("Lord Voldemort: Imperio\n");
+}
