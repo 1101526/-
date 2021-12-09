@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define M 10000
+#define N                                                         //保证数字足够多
+struct character
+{
+    int b;                                                       //blood_value
+    int m;                                                       //magic_value
+    int s;                                                       //shield_value
+
+}p,v;
+
+int main()
+{
+    printf("Lord Voldemort:\n");
+    printf("Harry Potter:\n");
+    printf("Lord Voldemort:\n");
+    printf("Harry Potter:\n");
+    printf("Lord Voldemort:\n");
+    printf("Harry Potter:\n");
+    printf("Lord Voldemort:\n");
+    printf("Harry Potter:\n");                      //对话
+
+    srand(time(NULL));
+    int a[M],b[N];                               //a[]为卡库里随机抽取卡号,b[]为Boss本轮使用卡号
+    long i;
+    int;
+    for(i=0;i<M;i++)
+        a[i]=rand()%10;                          //a[]填充本轮抽卡数量
+    for(i=0;i<N;i++)
+        b[i]=rand()%4;                           //b[]填充本轮抽卡数量
+
+    int p.b=  ,v.b=  ;
+    int p.m=  ,p.s=0;                           //初始值                        
+}
+
