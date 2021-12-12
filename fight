@@ -1,14 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define M 10000
-#define N                                                         //保证数字足够多
+#define M 10000                                                       //保证数字足够多
+#define N                                                            //Boss卡牌数
+#define L                                                           //玩家卡牌数
 struct character
 {
-    int b;                                                       //blood_value
+    int b;                                                        //blood_value
     int m;                                                       //magic_value
-    int s;                                                       //shield_value
+    int s;                                                      //shield_value
 
-}p,v;
+}p,v;                                                          //player和Lord Voldemort
+
 
 int main()
 {
@@ -19,18 +21,38 @@ int main()
     printf("Lord Voldemort:\n");
     printf("Harry Potter:\n");
     printf("Lord Voldemort:\n");
-    printf("Harry Potter:\n");                      //对话
+    printf("Harry Potter:\n");
+                          //对话
 
     srand(time(NULL));
     int a[M],b[N];                               //a[]为卡库里随机抽取卡号,b[]为Boss本轮使用卡号
     long i;
     int;
     for(i=0;i<M;i++)
-        a[i]=rand()%10;                          //a[]填充本轮抽卡数量
-    for(i=0;i<N;i++)
-        b[i]=rand()%4;                           //b[]填充本轮抽卡数量
+    {
+        a[i]=rand()%L;                            //a[]玩家卡库排序
+        b[i]=rand()%N;                           //b[]Boss卡牌排序
+    }
+    p.b=1000,v.b=100000;
+    p.m=10,p.s=0,v.s=0;                        //初始值
 
-    int p.b=  ,v.b=  ;
-    int p.m=  ,p.s=0;                           //初始值                        
+    int card[4],i=0,j=0;
+    char name[10];
+    while (p.b>0&&v.b>0)
+    {
+        for(;i<4;i++)
+        card[L]
+        printf("%s                                                                       Lord Voldemort\n",name[10]);
+        printf("血量:%d/1000                                                               血量:%d/100000\n",p.b,v.b);
+        printf("魔力:%d/10                                                                   魔力:max\n",p.m);
+        printf("护盾:%d                                                                       护盾:%d\n",p.s,v.s);         //对战界面
+        printf();
+        printf();
+        printf();
+        printf();                                                                                                         //卡牌
+
+        break;
+
+
+    }
 }
-
