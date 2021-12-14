@@ -110,6 +110,7 @@ int main()
         {        
              printf("魔力不足，请重新输入");
              goto repeat;
+             choose=0;
         }
         }
         else if                                                                                              //角色技能
@@ -118,6 +119,7 @@ int main()
         {    
             printf("无此魔咒，请重新输入");
             goto repeat;
+            choose=0;
         }
         for(;i<4;i++)                                                                                      //卡牌抽取
         {
