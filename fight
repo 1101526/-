@@ -1,16 +1,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define M 10000                                                       //保证数字足够多
-#define N                                                            //Boss卡牌数
-#define L                                                           //玩家卡牌数
+#define L                                                            //玩家卡牌数
+#define N                                                           //Boss卡牌数
 struct character
 {
     int b;                                                        //blood_value
     int m;                                                       //magic_value
     int s;                                                      //shield_value
 
+
+
 }p,v;                                                          //player和Lord Voldemort
 
+void find_name(int n,char name[10])                         //卡牌对应名
+{
+    char all[][10]={"","","","","","","","","","","","",""};      //所有名称
+        name[10]=all[n][10];
+}
+
+int m_judge(int *m,int n)                                  //蓝量判断,同时减去消耗的蓝量
+{
+    int result;
+    if(n<4)
+        *m-=n;
+    if(n>3&&n<7)
+        *m-=(n-3);
+    if(n>6&&n<10)
+        *m-=(n-6);
+    if(n>9&&n<13)
+        *m-=(n-9);
+    if(n>12&&n<16)
+        *m-=(n-12);
+    if(*m>=0)
+        result=1;
+    if(*m<0)
+    result=0;
+    return result;
+}
 
 int main()
 {
@@ -21,38 +48,93 @@ int main()
     printf("Lord Voldemort:\n");
     printf("Harry Potter:\n");
     printf("Lord Voldemort:\n");
-    printf("Harry Potter:\n");
-                          //对话
+    printf("Harry Potter:\n");                      //对话
 
     srand(time(NULL));
-    int a[M],b[N];                               //a[]为卡库里随机抽取卡号,b[]为Boss本轮使用卡号
+    int a[M],b[M];                               //a[]为玩家卡库里随机抽取卡号,b[]为Boss本轮使用卡号
     long i;
     int;
     for(i=0;i<M;i++)
     {
-        a[i]=rand()%L;                            //a[]玩家卡库排序
-        b[i]=rand()%N;                           //b[]Boss卡牌排序
+        a[i]=rand()%L+1;                            //a[]玩家卡库排序
+        b[i]=rand()%N+1;                           //b[]Boss卡牌排序
     }
     p.b=1000,v.b=100000;
     p.m=10,p.s=0,v.s=0;                        //初始值
 
-    int card[4],i=0,j=0;
-    char name[10];
+    int hand_card[4],j=4,k;
+    int choose;
+    char role_name[10],card_name[10];                      //抽取的角色和卡牌名
     while (p.b>0&&v.b>0)
     {
         for(;i<4;i++)
-        card[L]
-        printf("%s                                                                       Lord Voldemort\n",name[10]);
+        hand_card[i]=a[i];
+        printf("%s                                                                       Lord Voldemort\n",role_name);
         printf("血量:%d/1000                                                               血量:%d/100000\n",p.b,v.b);
         printf("魔力:%d/10                                                                   魔力:max\n",p.m);
-        printf("护盾:%d                                                                       护盾:%d\n",p.s,v.s);         //对战界面
-        printf();
-        printf();
-        printf();
-        printf();                                                                                                         //卡牌
+        printf("护盾:%d                                                                       护盾:%d\n",p.s,v.s);
+        printf("你的卡牌:/n");
+        for(;i<4;i++)                                                                //卡牌显示
+        {
+            find_name(hand_card[i],card_name)
+            printf("%d %s/n",hand_card[i],card_name);
+        }
+        printf("角色技能");
+        printf("/n");
+        printf("你的选择是");
+        scanf("%d",&choose);
 
-        break;
+        if(choose==hand_card[0]||choose==hand_card[1]||choose==hand_card[2]||choose==hand_card[3])             //卡牌使用
+        {
+            if(m_judge(&p.m,choose))
+            {
+                    if(choose==1)
+                    if(choose==2)
+                    if(choose==3)
+                    if(choose==4)
+                    if(choose==5)
+                    if(choose==6)
+                    if(choose==7)
+                    if(choose==8)
+                    if(choose==9)
+                    if(choose==10)
+                    if(choose==11)
+                    if(choose==12)
+                    if(choose==13)
+                    if(choose==14)
+                    if(choose==15)
+                    if(choose==16)
 
+            }
+            else
+                printf("魔力不足");
+        }
+        else if                                                                                              //角色技能
 
+        else
+            printf("无此魔咒");
+
+        for(;i<4;i++)                                                                                      //卡牌抽取
+        {
+            if(hand_card[i]==choose)
+                k=i;
+            break;
+        }
+        hand_card[k]=a[j];
+        j++;
+
+            if (b[j-5]==1)                                                                             //boss攻击
+            if (b[j-5]==2)
+            if (b[j-5]==3)
+            if (b[j-5]==4)
+            if (b[j-5]==5)
+
+        p.m+=2;                                                                                       //回魔
     }
+    if(p.b<=0)
+        printf("你被打败了");
+    if(v.b<=0)
+        printf("你获胜了");
+    return 0;
 }
+
