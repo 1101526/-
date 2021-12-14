@@ -88,7 +88,7 @@ int main()
         {
             if(m_judge(&p.m,choose))
             {
-                    if(choose==1)
+                    if(choose==1)                                                                               //套用函数
                     if(choose==2)
                     if(choose==3)
                     if(choose==4)
@@ -123,7 +123,7 @@ int main()
         hand_card[k]=a[j];
         j++;
 
-            if (b[j-5]==1)                                                                             //boss攻击
+            if (b[j-5]==1)                                                                             //boss攻击,套用函数
             if (b[j-5]==2)
             if (b[j-5]==3)
             if (b[j-5]==4)
