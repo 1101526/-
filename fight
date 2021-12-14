@@ -82,7 +82,7 @@ int main()
         printf("角色技能");
         printf("/n");
         printf("你的选择是");
-        scanf("%d",&choose);
+        repeat:scanf("%d",&choose);
 
         if(choose==hand_card[0]||choose==hand_card[1]||choose==hand_card[2]||choose==hand_card[3])             //卡牌使用
         {
@@ -107,13 +107,18 @@ int main()
 
             }
             else
-                printf("魔力不足");
+        {        
+             printf("魔力不足，请重新输入");
+             goto repeat;
+        }
         }
         else if                                                                                              //角色技能
 
         else
-            printf("无此魔咒");
-
+        {    
+            printf("无此魔咒，请重新输入");
+            goto repeat;
+        }
         for(;i<4;i++)                                                                                      //卡牌抽取
         {
             if(hand_card[i]==choose)
