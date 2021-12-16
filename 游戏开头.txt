@@ -1,6 +1,8 @@
 #include <stdio.h>
-#include <windows.h>
-#include<stdlib.h>
+#include <string.h>
+#include <stdlib.h>
+#include <Windows.h>
+#include <assert.h>
 #define M 10000                                                       //保证数字足够多
 #define L                                                            //玩家卡牌数
 #define N                                                           //Boss卡牌数
@@ -12,49 +14,30 @@ struct character
 
 }p,v;                                                        //palyer,Lord Voldemort
 
-void find_name(int n,char name[10])                         //卡牌对应名
-{
-    char all[][10]={"","","","","","","","","","","","",""};      //所有名称
-        name[10]=all[n][10];
-}
-
-int m_judge(int *m,int n)                                  //蓝量判断,同时减去消耗的蓝量
-{
-    int result;
-    if(n<4)
-        *m-=n;
-    if(n>3&&n<7)
-        *m-=(n-3);
-    if(n>6&&n<10)
-        *m-=(n-6);
-    if(n>9&&n<13)
-        *m-=(n-9);
-    if(*m>=0)
-        result=1;
-    if(*m<0)
-    result=0;
-    return result;
-}
+void Character_animation1();
+void Character_animation2();
+void Character_animation3();
+void Character_animation4();
 int main()
 {
     srand(time(NULL));
     system("color 0C");
-	int i,q,s_b=1000;
+	int i,q,s_b=1000,cho;
 	printf(" ------------------------------------------------------------------------------------------------------------------------\n");
 	printf("|                                                                                                                        |\n");
 	printf("|                                                                                                                        |\n");
 	printf("|                                                                                                                        |\n");
 	printf("|                                                                                                                        |\n");
-	printf("|                                            哈利波特与魔法石                                                            |\n");
+	printf("|                                              Magic World                                                               |\n");
 	printf("|                                                                                                                        |\n");
-	printf("|                                                制作组xxxxx                                                             |\n");
-	printf("|                                                                                                                        |\n");
-	printf("|                                                                                                                        |\n");
-	printf("|                                                                                                                        |\n");
-	printf("|                                            请按1键开始游戏                                                             |\n");
+	printf("|                                              制作组xxxxx                                                               |\n");
 	printf("|                                                                                                                        |\n");
 	printf("|                                                                                                                        |\n");
-    printf("|                                           运行时请全屏运行                                                             |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                             请按1键开始游戏                                                            |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+    printf("|                                             运行时请全屏运行                                                           |\n");
 	printf("|                                                                                                                        |\n");
 	printf("|                                                                                                                        |\n");
 	printf("|                                                                                                                        |\n");
@@ -82,13 +65,14 @@ int main()
 	Sleep(800);
 	printf("首先,让我们来熟悉下战斗环节\n");
 	Sleep(800);
-	printf("快看那是什么，一只野生的伏地魔残魂！一只野生的伏地魔出现了，让我们来战胜他\n");
+	printf("快看那是什么，一只野生的伏地魔残魂！一只野生的伏地魔出现了!让我们来战胜他\n");
 	Sleep(800);
 	printf("\n");
 	printf("palyer                                                                     Lord Voldemort(remnant soul)\n");
     printf("血量:max                                                                   血量:%d/1000\n",s_b);
     printf("魔力:10/10                                                                 魔力:0/0\n");
     printf("护盾:max                                                                   护盾:0/0\n");
+    printf("\n");
     printf("你的卡牌:\n");
     printf("1 Incendio\n");
     printf("\n");
@@ -104,7 +88,7 @@ int main()
      printf("熊熊的火焰在对手脚下灼烧，对手HP-600\n");
      Sleep(200);}
      s_b-=800;
-     printf("火焰最终的绽放！对手HP-600\n");}
+     printf("火焰最终的绽放！对手HP-800\n");}
      else
      {
          printf("请输入正确字符继续进行游戏！");
@@ -115,31 +99,40 @@ int main()
     printf("血量:max                                                                   血量:%d/1000\n",s_b);
     printf("魔力:8/10                                                                  魔力:0/0\n");
     printf("护盾:max                                                                   护盾:0/0\n");
+    printf("\n");
     printf("你的卡牌:\n");
     printf("1 Incendio\n");
     Sleep(800);
+    printf("\n");
     printf("相信你也注意到了当你使用卡牌以后，你的魔力值减少了\n");
     Sleep(800);
+    printf("注意，如果魔力值不足以释放你的魔咒，你本回合不会释放任何魔咒！\n");
+    Sleep(800);
     printf("不过不用担心，每回合结束后，你都会自动回复两点魔力值\n");
+    Sleep(800);
     printf("就像这样\n");
-    Sleep(7000);
+    Sleep(6000);
     system("cls");
     printf("palyer                                                                     Lord Voldemort(remnant soul)\n");
     printf("血量:max                                                                   血量:%d/1000\n",s_b);
     printf("魔力:10/10                                                                 魔力:0/0\n");
     printf("护盾:max                                                                   护盾:0/0\n");
+    printf("\n");
     printf("你的卡牌:\n");
     printf("0 (无)\n");
     printf("1 Incendio\n");
     Sleep(800);
+    printf("\n");
     printf("其次便是这个突然出现的0，它是每个角色的专属技能\n");
     Sleep(800);
     printf("它将在你抽取到人物后解锁，但每场战斗只能释放一次\n");
     Sleep(6000);
     system("cls");
     printf("啊，可恶，聊的太投入了，居然被他跑了，赶快追上去！\n");
+    Sleep(800);
     printf("在这之前，先去找寻你同行的伙伴吧\n");
-    printf("请输入1继续游戏\n");
+    Sleep(800);
+    printf("(请输入1继续游戏)\n");
 	error4: scanf("%d", &i);
     if (i == 1)
 	{
@@ -153,8 +146,8 @@ int main()
     goto error4;
     }
 
-	printf("进入抽卡界面");
-	printf("按1继续");
+	printf("进入伙伴抽取界面\n");
+	printf("(按1继续)\n");
     error2: scanf("%d", &i);
     if (i == 1)
 	{
@@ -168,30 +161,30 @@ int main()
     goto error2;
     }
 
-	printf(" --------------------------------------------------------------------------------------------------------------------------\n");
-	printf("|  -------------------                                                                                                     |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |        卡1        |                  卡卡卡卡卡卡卡                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-    printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("| |                   |                                                                                                    |\n");
-	printf("|  -------------------                                                                                                     |\n");
-    printf("|  按下1键随机抽取一位人物开始你的冒险！                                                                                   |\n");
-	printf(" ------------------------------------------------------------------------------------------------------------------------\n");
+	printf(" ---------------------------------------------------------------------------------------------------------\n");
+	printf("|  ------------------------ ------------------------ ------------------------ ------------------------                                                                   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |      Harry Potter      |    Hermione Granger    |     Newt Scamander     |  Aberforth Dumbledore  |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |   拥有勇气与狮心的传奇 |                        |                        |                        |   |\n");
+	printf("| | 男孩面对险境他总能保护 |                        |                        |                        |   |\n");
+	printf("| | 自己与伙伴！           |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+    printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("|  ------------------------ ------------------------ ------------------------ ------------------------    |\n");
+    printf("|  按下1键随机抽取一位人物开始你的冒险！                                                                  |\n");
+	printf(" ---------------------------------------------------------------------------------------------------------\n");
 	error3: scanf("%d", &i);
     if (i == 1)
 	{
@@ -204,4 +197,69 @@ int main()
     i=0;
     goto error3;
     }
+    cho=rand()%4+1;
+    char all_name[4][20]={"Harry Potter","Hermione Granger","Newt Scamander","Aberforth Dumbledore"};
+    system("cls");
+    printf("%s将与你同行！\n",all_name[cho]);
+    Sleep(800);
+    switch(cho)
+    {
+    case 1:Character_animation1();break;
+    case 2:Character_animation2();break;
+    case 3:Character_animation3();break;
+    case 4:Character_animation4();break;
+    }
+    printf("\n\n\n");
+    printf("有了值得信赖的伙伴同行，相信接下来的战斗会更加轻松\n");
+    Sleep(800);
+    printf("最后熟悉下你的卡牌，就正式上路吧\n");
+    Sleep(800);
+    printf("（请输入1查看你的卡牌）\n");
+    error5: scanf("%d", &i);
+    if (i == 1)
+	{
+		system("cls");
+		i=0;
+	}
+	else
+    {
+        printf("请输入正确字符继续进行游戏！");
+    i=0;
+    goto error5;
+    }
+    printf("\n");                                                                           //卡牌介绍页面
+
+    printf("如果准备好了，那就开始吧！\n");
+    Sleep(800);
+    printf("（请输入1进行跳转）\n");
+    error6: scanf("%d", &i);
+    if (i == 1)
+	{
+		system("cls");
+		i=0;
+	}
+	else
+    {
+        printf("请输入正确字符继续进行游戏！");
+    i=0;
+    goto error6;
+    }
+    printf("经过几天的追寻，你终于发现了伏地魔，大战一触即发\n");
+
+}
+void Character_animation1()
+{
+    printf("h");
+}
+void Character_animation2()
+{
+    printf("m");
+}
+void Character_animation3()
+{
+    printf("l");
+}
+void Character_animation4()
+{
+    printf("a");
 }
