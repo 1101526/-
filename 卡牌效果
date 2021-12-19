@@ -1,78 +1,199 @@
-void Protego(int *p,char name[10])                          //盔甲护身
+void Golden_snitch(int *p,char name[10])              //金色飞贼    0
 {
-    *p+=500;
-    printf("%s: Protego!\n",name);
-    printf("shield_value+500\n");
+    system("cls");
+    system("color 06");
+    *p+=2;
+    printf("%s: Golden snitch!\n",name);
+    Sleep(1000);
+    printf("这是最珍贵的游走球！\n",name);
+    Sleep(1000);
+    printf("活力泉涌！魔力值+2\n",name);
+    Sleep(1000);
 }
-
- void Incendio(int *p,char name[10])                        //火焰熊熊（每回合造成伤害）
- {
-     *p-=1000;
-     printf("%s: Incendio!\n",name);
-     printf("blood_value-1000\n");
- }
-
- void Wingardium_Leviosa(int *p,char name[10])             //除你武器（0对应的数无效果）
- {
-     *p=0;
-     printf("%s: Wingardium Leviosa!\n",name);
-     printf("Lord Voldemort stop two rounds");
- }
-
-void Sectumsempra(int *p,char name[10])                   //神锋无影
+void  Episkey(int *p,char name[10])                      //愈合如初     1
 {
+    system("cls");
+    system("color 02");
+    *p+=500;
+    printf("%s: Episkey!\n",name);
+    Sleep(1000);
+    printf("战斗的疲惫降低了！HP+500\n");
+    Sleep(1000);
+}
+void  Accio(int *p,char name[10])                      //飞来咒    2
+{
+    system("cls");
+    system("color 0F");
+    *p-=1000;
+    printf("%s: Accio!\n",name);
+    Sleep(1000);
+    printf("无形之手扼住了对面Hp-500\n");
+    Sleep(1000);
+    printf("急速的飞行冲昏了对方。\n他失去两回合的施法能力！");
+    Sleep(1000);
+}
+void  Expecto_patronus(int *p,char name[10])        //呼神护卫  2
+{   system("cls");
+    system("color 03");
+    *p+=1000;
+    printf("%s: Expecto patronus!\n",name);
+    Sleep(1000);
+    printf("神鹿化作光围绕着我！护盾量+1000\n");
+    Sleep(1000);
+}
+void Sectumsempra(int *p,char name[10])                   //神锋无影   2
+{
+    system("cls");
+    system("color 0F");
     int i=0;
     printf("%s: Sectumsempra!\n",name);
-    for(;i<5;i++)
+    Sleep(1000);
+    for(;i<4;i++)
     {
         *p-=500;
-        printf("blood_value-500\n");
-    }
+        printf("凌冽的刀光切割了对手！对方HP-500\n");
+        Sleep(1000);
+    }Sleep(1000);
 }
-
-void  Episkey(int *p,char name[10])                      //愈合如初
+void  Expelliarmus(int *p,char name[10])         //除你武器    2
 {
-    *p+=300;
-    printf("%s: Episkey!\n",name);
-    printf("blood_value+300\n");
+     system("cls");
+     system("color 0C");
+     printf("%s: Expelliarmus!\n",name);
+     Sleep(1000);
+     printf("“你被缴械了！”");
+     Sleep(1000);
 }
-
-void Oppugno(int *p,char name[10])
+ void  Orb_of_water(int *p,char name[10])        //水牢    3
 {
-    int i=0,j=100;
+    system("cls");
+    system("color 01");
+    printf("%s: Orb_of_water!\n",name);
+    Sleep(1000);
+    for(int i=0;i<4;i++)
+    {*p-=300;
+     printf("水流将对方缠绕！对手HP-300\n");
+     Sleep(1000);}
+     printf("水化作牢笼！（禁锢对手三回合）");
+     Sleep(1000);
+void Oppugno(int *p,char name[10])           //万弹齐发  1
+{
+    system("cls");
+    system("color 06");
+    int i=0;
     printf("%s; Oppugno!\n",name);
     for(;i<8;i++)
     {
-        p-=j;
-        j+=50;
-        printf("blood_value-%d\n",j);
-    }
+        *p-=150;
+        printf("金色的飞鸟冲向了恶魔，对手HP-150\n");
+        Sleep(200);}
+    Sleep(1000);
 }
-
-
-
-
-
-
+void  Stupefy(int *p,char name[10])             //昏昏倒地  1
+ {   system("cls");
+     system("color 0D");
+     printf("%s: Stupefy!\n",name);
+     printf("对手失去了行动力！");
+     Sleep(1000);
+ }
+void  Time_Turner(int *p,char name[10])      //时间转换器  1
+{   system("cls");
+    system("color 0F");
+    printf("%s: Time~Turner!\n",name);
+    for(int i=0;i<4;i++)
+    {*p+=100;
+     printf("时~光~回~溯~\n");
+     Sleep(200);}
+     printf("恢复了健康的状态！HP+800\n");
+    Sleep(1000);
+}
+void Incendio(int *p,char name[10])          //火焰熊熊  2
+ {   system("cls");
+     system("color 04");
+     printf("%s: Incendio!\n",name);
+     for(int i=0;i<3;i++)
+    {*p-=600;
+     printf("熊熊的火焰在对手脚下灼烧，对手HP-600\n");
+     Sleep(200);}
+     *p-=800;
+     printf("火焰最终的绽放！对手HP-600\n");
+     Sleep(1000);
+ }
+void  Expelliarmus(int *p,char name[10])         //除你武器  2
+ {
+     system("cls");
+     system("color 0C");
+     printf("%s: Expelliarmus!\n",name);
+     printf("“你被缴械了！”");
+     Sleep(1000);
+ }
+void  Petrificus_Totalus(int *p,char name[10])         //统统石化  2
+ {
+     system("cls");
+     system("color 0D");
+     *p-=1000;
+     printf("%s: Petrificus Totalus!\n",name);
+     printf("对方变成了？一尊石像！（对手HP-1000）");
+     Sleep(1000);
+ }
+void  Reducto(int *p,char name[10])        //粉身碎骨   2
+{
+    system("cls");
+    system("color 0F");
+    printf("%s: Reducto!\n",name);
+   for(int i=0;i<5;i++)
+    {*p-=150;
+     printf("嘎达,嘎达,嘎....\n");
+     Sleep(150);
+     *p-=150;
+     printf("嗙，砰，DuangDuangDuang....\n");
+     Sleep(150);}
+    printf("\n对手HP-1000\n这个魔法仿佛有搅碎对手的力量。\n");
+    Sleep(1500);
+}
+void  Weasley_Bang(int *p,char name[10])         //韦斯莱烟花  3
+{   system("cls");
+    system("color 06");
+    printf("%s: Weasley! Bang!\n",name);
+    for(int i=0;i<4;i++)
+    {*p-=200;
+     printf("烟花在空气中爆炸，对手HP-200\n");
+     Sleep(100);}
+     Sleep(500);
+     *p-=2000;
+     printf("“烟花龙头”炸开了空气！！！对手HP-2000\n");
+     Sleep(1000);
+}
 void Crucio(int *p)                               //钻心剜骨
-{
+{   system("cls");
+    system("color 02");
+    printf("Lord Voldemort: Crucio!\n");
+    Sleep(1000);
     int i=0;
-    for(;i<3;i++)
+    for(;i<5;i++)
     {
-        *p-=100;
-        printf("Lord Voldemort: Crucio!\n");
-        printf("blood_value-100\n");
+        *p-=50;
+        printf("电流般的邪恶魔法摧残着你的内心，你的HP-50\n");
+        Sleep(1000);
     }
 }
-
-void Avada_Kedavra(int *p)                        //啃大瓜
-{
-    *p-=500;
-    printf("Lord Voldemort: Avada Kedavra!\n");
-    printf("blood_value-500\n");
-}
-
 void Imperio(int *p)                              //魂魄出窍
-{
-    printf("Lord Voldemort: Imperio\n");
+{   system("color 0D");
+    printf("Lord Voldemort: Imperio~\n");
+    Sleep(1000);
+}
+void Avada_Kedavra(int *p)                        //啃大瓜
+{   system("cls");
+    system("color 72");
+    printf("Lord Voldemort: Avada Kedavra!!!!!!\n");
+    *p=1;
+    for(int i=0;i<6;i++)
+    {system("color 02");
+     Sleep(500);
+     printf("“啊！！！”\n");
+     system("color 72");
+     Sleep(500);
+    }system("color 0C");
+    printf("“索命咒”黑魔法师威力最高的魔法，一切生物，一击必死......但作为预言之子的你！仍有一缕意识！（HP减至1）");
+    Sleep(1000);
 }
