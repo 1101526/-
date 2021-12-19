@@ -74,7 +74,7 @@ int main()
     printf("护盾:max                                                                   护盾:0/0\n");
     printf("\n");
     printf("你的卡牌:\n");
-    printf("1 Incendio\n");
+    printf("1 Incendio(1)\n");
     printf("\n");
     Sleep(800);
     printf("现在让我们输入魔咒前的数字，进行咒语释放：");
@@ -104,7 +104,7 @@ int main()
     printf("1 Incendio\n");
     Sleep(800);
     printf("\n");
-    printf("相信你也注意到了当你使用卡牌以后，你的魔力值减少了\n");
+    printf("相信你也注意到了当你使用卡牌以后，你的魔力值减少了,括号中的数字即为你魔力的消耗\n");
     Sleep(800);
     printf("注意，如果魔力值不足以释放你的魔咒，你本回合不会释放任何魔咒！\n");
     Sleep(800);
