@@ -4,8 +4,6 @@
 #include <Windows.h>
 #include <assert.h>
 #define M 10000                                                       //保证数字足够多
-#define L                                                            //玩家卡牌数
-#define N                                                           //Boss卡牌数
 struct character
 {
     int b;                                                       //blood_value
@@ -34,10 +32,10 @@ int main()
 	printf("|                                                                                                                        |\n");
 	printf("|                                                                                                                        |\n");
 	printf("|                                                                                                                        |\n");
-	printf("|                                             请按1键开始游戏                                                            |\n");
+	printf("|                                             请按1键开始游戏                                                             |\n");
 	printf("|                                                                                                                        |\n");
 	printf("|                                                                                                                        |\n");
-    printf("|                                             运行时请全屏运行                                                           |\n");
+        printf("|                                             运行时请全屏运行                                                            |\n");
 	printf("|                                                                                                                        |\n");
 	printf("|                                                                                                                        |\n");
 	printf("|                                                                                                                        |\n");
@@ -119,13 +117,14 @@ int main()
     printf("护盾:max                                                                   护盾:0/0\n");
     printf("\n");
     printf("你的卡牌:\n");
-    printf("0 (无)\n");
     printf("1 Incendio\n");
+    printf("角色技能“\n);
+    printf("无\n")
     Sleep(800);
     printf("\n");
-    printf("其次便是这个突然出现的0，它是每个角色的专属技能\n");
+    printf("其次便是这个突然出现的角色技能\n");
     Sleep(800);
-    printf("它将在你抽取到人物后解锁，但每场战斗只能释放一次\n");
+    printf("它将在你抽取到人物后进行解锁，但每场战斗只能释放一次\n");
     Sleep(6000);
     system("cls");
     printf("啊，可恶，聊的太投入了，居然被他跑了，赶快追上去！\n");
