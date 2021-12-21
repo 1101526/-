@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define M 10000                                                       //保证数字足够多
-#define L                                                            //玩家卡牌数
-#define N                                                           //Boss卡牌数
 void  Oppugno(int *p,char name[10]);
-void  Stupefy(int *p,char name[10]);
+void  Stupefy(int *p,char name[10],int *r);
 void  Time_Turner(int *p,char name[10]);
 void  Weasley_Bang(int *p,char name[10]);
-void  Expelliarmus(int *p,char name[10]);
-void  Petrificus_Totalus(int *p,char name[10]);
+void  Expelliarmus(int *p,char name[10],int *r);
+void  Petrificus_Totalus(int *p,char name[10],int *r);
 void  Reducto(int *p,char name[10]);
+void victory();
 struct character
 {
     int b;                                                        //blood_value
@@ -17,25 +16,33 @@ struct character
     int s;                                                      //shield_value
 }p,v;                                                          //player和Lord Voldemort
 
-void find_name(int n,char name[10])                         //卡牌对应名
+void find_name(int n)                         //卡牌对应名
 {
-    char all[][10]={"","","","","","","","","","","","",""};      //所有名称
-        name[10]=all[n][10];
+    char all[][100]={" ","Oppugno 万弹齐发(1)","Incendio 火焰熊熊(2)","Weasley Band 韦斯莱烟花(3)","Stupefy 昏昏倒地(1)","Expelliarmus 统统石化(2)","Time Turner 时光转换器(1)","Petrificus Totalus 除你武器(2)","Reducto 粉身碎骨(2)"};      //所有名称
+      printf("%s",all[n]);
 }
 
 int m_judge(int *m,int n)                                  //蓝量判断,同时减去消耗的蓝量
 {
-    int result;
-    if(n%4==1)
-    *m-=1;
-    if(n%4==2)
-    *m-=2;
-    if(n%4==3)
-    *m-=3;
-    if(*m>0)
+    int result,in=*m;
+    switch(n)
+    {
+        case 1:*m-=1;break;
+        case 2:*m-=2;break;
+        case 3:*m-=3;break;
+        case 4:*m-=1;break;
+        case 5:*m-=2;break;
+        case 6:*m-=1;break;
+        case 7:*m-=2;break;
+        case 8:*m-=2;break;
+    }
+    if(*m>=0)
     result=1;
     if(*m<0)
-    result=0;
+    {
+        *m=in;
+        result=0;
+    }
     return result;
 }
 int main()
@@ -50,37 +57,76 @@ int main()
     printf("Harry Potter:\n");                      //对话
     srand(time(NULL));
     int a[M],b[M];                               //a[]为玩家卡库里随机抽取卡号,b[]为Boss本轮使用卡号
-    long i;
-    int;
+    long i=0;
+    int wu=0;
     for(i=0;i<M;i++)
     {
-        a[i]=rand()%L+1;                            //a[]玩家卡库排序
-        b[i]=rand()%N+1;                           //b[]Boss卡牌排序
+        a[i]=rand()%8+1;                            //a[]玩家卡库排序
+        b[i]=rand()%3+1;                           //b[]Boss卡牌排序
     }
     p.b=2000,v.b=10000;
-    p.m=4,p.s=0,v.s=0;                        //初始值
+    p.m=2,p.s=0,v.s=0;                        //初始值
 
     int hand_card[4],j=4,k;
+    int part=1;
     int choose;
     int counter=1;
-    char role_name[10],card_name[10];                      //抽取的角色和卡牌名
-    while (p.b>0&&v.b>0)
+    int round1=0;
+    int round2=0;
+    char role_name[]="Hermione",card_name[10];
+    int o;
+    for(i=0;i<4;i++)       //抽取的角色和卡牌名
     {
-        for(;i<4;i++)
-        hand_card[i]=a[i];
-        printf("%s                                                                       Lord Voldemort\n",role_name);
-        printf("血量:%d/1000                                                               血量:%d/100000\n",p.b,v.b);
-        printf("魔力:%d/10                                                                   魔力:max\n",p.m);
-        printf("护盾:%d                                                                       护盾:%d\n",p.s,v.s);
-        printf("你的卡牌:/n");
-        for(;i<4;i++)                                                                //卡牌显示
+        hand_card[i]=rand()%8+1;
+        for(o=0;o>=0;o++)
         {
-            find_name(hand_card[i],card_name);
-            printf("%d %s/n",hand_card[i],card_name);
+            if(hand_card[0]==hand_card[1])
+                hand_card[1]=rand()%8+1;
+            else break;
+        }
+        for(o=0;o>=0;o++)
+        {
+            if(hand_card[2]==hand_card[1]||hand_card[2]==hand_card[0])
+                hand_card[2]=rand()%8+1;
+                 else break;
+        }
+        for(o=0;o>=0;o++)
+        {
+            if(hand_card[3]==hand_card[2]||hand_card[3]==hand_card[1]||hand_card[3]==hand_card[0])
+                hand_card[3]=rand()%8+1;
+                 else break;
+        }
+    }
+
+    while (p.b>0&&v.b>0)
+    {   player:if(round1!=0)
+        {   round1--;
+           system("cls");
+           system("color 07");
+           printf("“啊......”痛苦的眩晕感侵袭了你\n（本回合跳过你的出牌阶段）\n");
+           Sleep (2000);
+           system("cls");
+           p.m+=2;
+           if(p.m>=8)
+           p.m=8;
+            goto boss;
+            }
+        if(round1==0)
+        {printf("第%d回合\n",part);
+        printf("%s                                                                      Lord Voldemort\n",role_name);
+        printf("血量:%d/2000                                                                血量:%d/10000\n",p.b,v.b);
+        printf("魔力:%d/8                                                                      魔力:max\n",p.m);
+        printf("护盾:%d                                                                        护盾:%d\n",p.s,v.s);
+        printf("你的卡牌:\n");
+        for(i=0;i<4;i++)                                                                //卡牌显示
+        {
+            printf("%d ",hand_card[i]);
+            find_name(hand_card[i]);
+            printf("\n");
         }
         printf("角色技能");
-        printf("/n“魔力精通”");
-        printf("你的选择是");
+        printf("\n魔力精通(剩余次数:%d次)\n\n",counter);
+        printf("你的选择是:");
         repeat:scanf("%d",&choose);
         if(choose==hand_card[0]||choose==hand_card[1]||choose==hand_card[2]||choose==hand_card[3])             //卡牌使用
         {
@@ -88,23 +134,16 @@ int main()
             {
                     switch(choose)
                     {
-                        case 1:Oppugno(&v.b,role_name);
-                        case 5:Stupefy(&v.b,role_name);
-                        case 9:Time_Turner(&p.b,role_name);
-                        case 3:Weasley_Bang(&v.b,role_name);
-                        case 6:Expelliarmus(&p.s,role_name);
-                        case 10:Petrificus_Totalus(&v.b,role_name);
-                        case 14:Reducto(&v.b,role_name);
-                        case 2:Incendio(&v.b,role_name);
-                    }
-            }
-            else
-        {
-             printf("魔力不足，请重新输入");
-        }
-        }
-        else if(choose==0&&counter==0)             //角色技能
-        printf("你的技能使用次数已耗尽");
+                        case 1:Oppugno(&v.b,role_name);Sleep(400);break;
+                        case 4:Stupefy(&v.b,role_name,&round2);Sleep(400);break;
+                        case 6:Time_Turner(&p.b,role_name);Sleep(400);break;
+                        case 3:Weasley_Bang(&v.b,role_name);Sleep(400);break;
+                        case 7:Expelliarmus(&p.s,role_name,&round2);Sleep(400);break;
+                        case 5:Petrificus_Totalus(&v.b,role_name,&round2);Sleep(400);break;
+                        case 8:Reducto(&v.b,role_name);Sleep(400);break;
+                        case 2:Incendio(&v.b,role_name);Sleep(400);break;
+                        case 0: {if(choose==0&&counter==0)             //角色技能
+                            {printf("你的技能使用次数已耗尽");break;}
         else  if(choose==0&&counter==1)
         {   int a;
             printf("选择你要使用的卡牌编号：\n");
@@ -118,43 +157,86 @@ int main()
             printf("2:Incendio 火焰熊熊\n");
             scanf("%d",&a);
             switch(a)
-            {   case 1:Oppugno(&v.b,role_name);
-                case 5:Stupefy(&v.b,role_name);
-                case 9:Time_Turner(&p.b,role_name);
-                case 3:Weasley_Bang(&v.b,role_name);
-                case 6:Expelliarmus(&p.s,role_name);
-                case 10:Petrificus_Totalus(&v.b,role_name);
-                case 14:Reducto(&v.b,role_name);
-                case 2:Incendio(&v.b,role_name);
+            {   case 1:Oppugno(&v.b,role_name);break;
+                case 5:Stupefy(&v.b,role_name,&round2);break;
+                case 9:Time_Turner(&p.b,role_name);break;
+                case 3:Weasley_Bang(&v.b,role_name);break;
+                case 6:Expelliarmus(&p.s,role_name,&round2);break;
+                case 10:Petrificus_Totalus(&v.b,role_name,&round2);break;
+                case 14:Reducto(&v.b,role_name);break;
+                case 2:Incendio(&v.b,role_name);break;
             }counter--;
             }
+                    }}
+            }
+            else
+        {
+             printf("魔力不足");
+             Sleep(800);
+        }
+        }
+        else
         {
             printf("无此魔咒，请重新输入");
             choose=0;
             goto repeat;
         }
-        for(;i<4;i++)                                                                                      //卡牌抽取
+        for(i=0;i<4;i++)                                                                                      //卡牌抽取
         {
             if(hand_card[i]==choose)
-                k=i;
-            break;
+            {
+                k=i;break;
+            }
         }
-        hand_card[k]=a[j];
-        j++;
-
-            if (b[j-5]==1)                                                                             //boss攻击,套用函数
-            if (b[j-5]==2)
-            if (b[j-5]==3)
-            if (b[j-5]==4)
-            if (b[j-5]==5)
-
-        p.m+=2;                                                                                       //回魔
-    }
-    if(p.b<=0)
-        printf("你被打败了");
+        for(o=0;o<4;o++)
+            a[o]=hand_card[o];
+        hand_card[k]=rand()%8+1;
+        for(o=0;o>=0;o++)
+        {
+            if(hand_card[k]==a[0]||hand_card[k]==a[1]||hand_card[k]==a[2]||hand_card[k]==a[3])
+            hand_card[k]=rand()%8+1;
+            else break;
+        } p.m+=1;
+       if(p.m>=8)
+        p.m=8;
+        j++;}
     if(v.b<=0)
-        printf("你获胜了");
-    return 0;
+    {victory();
+    return 0;}
+    boss:if(round2!=0)
+    {   round2--;
+        system("cls");
+        system("color 07");
+        printf("对方并没有展开行动\n对手的眩晕回合减少一回合...\n");
+        Sleep(2000);
+        system("cls");
+        part++;
+            goto player;}
+        if(round2==0)
+        {system("cls");
+    system("color 02");
+    printf("Lord Voldemort:现在，轮到我来掌握魔法了！\n(现在是对方的回合）\n");
+    system("pause");
+    part++;
+    srand(time(NULL));
+   long num;
+   num=rand()%100;
+   if(num>=96&&num<=99)
+   {
+       Avada_Kedavra(&p.b);
+    }
+   else if(num>=0&&num<=59)
+   {
+       Crucio(&p.b);
+     }
+   else{
+       Imperio(&p.m,&round1);
+       }
+       system("cls");
+       system("color 07");
+    }}
+    if(p.b<=0)
+    printf("你被打败了");
 }
 void Oppugno(int *p,char name[10])           //万弹齐发  1
 {
@@ -167,14 +249,15 @@ void Oppugno(int *p,char name[10])           //万弹齐发  1
         *p-=150;
         printf("金色的飞鸟冲向了恶魔，对手HP-150\n");
         Sleep(200);}
-    Sleep(2000);
+    system("pause");
 }
-void  Stupefy(int *p,char name[10])             //昏昏倒地  1
- {   system("cls");
+void  Stupefy(int *p,char name[10],int *r)             //昏昏倒地  1
+ {   *r=1;
+     system("cls");
      system("color 0D");
      printf("%s: Stupefy!\n",name);
-     printf("对手失去了行动力！");
-     Sleep(1000);
+     printf("对手失去了行动力！\n");
+     system("pause");
  }
 void  Time_Turner(int *p,char name[10])      //时间转换器  1
 {   system("cls");
@@ -185,7 +268,7 @@ void  Time_Turner(int *p,char name[10])      //时间转换器  1
      printf("时~光~回~溯~\n");
      Sleep(200);}
      printf("恢复了健康的状态！HP+800\n");
-    Sleep(1000);
+    system("pause");
 }
 void Incendio(int *p,char name[10])          //火焰熊熊  2
  {   system("cls");
@@ -197,24 +280,24 @@ void Incendio(int *p,char name[10])          //火焰熊熊  2
      Sleep(200);}
      *p-=800;
      printf("火焰最终的绽放！对手HP-800\n");
-     Sleep(1000);
+     system("pause");
  }
-void  Expelliarmus(int *p,char name[10])         //除你武器  2
- {
+void  Expelliarmus(int *p,char name[10],int *r)         //除你武器  2
+ {   *r=2;
      system("cls");
      system("color 0C");
      printf("%s: Expelliarmus!\n",name);
-     printf("“你被缴械了！”");
-     Sleep(1000);
+     printf("“你被缴械了！”\n");
+     system("pause");
  }
-void  Petrificus_Totalus(int *p,char name[10])         //统统石化  2
- {
+void  Petrificus_Totalus(int *p,char name[10],int *r)         //统统石化  2
+ {   *r=1;
      system("cls");
      system("color 0D");
-     *p-=1000;
+     *p-=800;
      printf("%s: Petrificus Totalus!\n",name);
-     printf("对方变成了？一尊石像！（对手HP-1000）");
-     Sleep(1000);
+     printf("对方变成了？一尊石像！（对手HP-800）\n");
+     system("pause");
  }
 void  Reducto(int *p,char name[10])        //粉身碎骨   2
 {
@@ -228,8 +311,8 @@ void  Reducto(int *p,char name[10])        //粉身碎骨   2
      *p-=150;
      printf("嗙，砰，DuangDuangDuang....\n");
      Sleep(150);}
-    printf("\n对手HP-1000\n这个魔法仿佛有搅碎对手的力量。\n");
-    Sleep(1500);
+    printf("\n对手HP-1500\n这个魔法仿佛有搅碎对手的力量。\n");
+    system("pause");
 }
 void  Weasley_Bang(int *p,char name[10])         //韦斯莱烟花  3
 {   system("cls");
@@ -242,5 +325,55 @@ void  Weasley_Bang(int *p,char name[10])         //韦斯莱烟花  3
      Sleep(500);
      *p-=2000;
      printf("“烟花龙头”炸开了空气！！！对手HP-2000\n");
-     Sleep(1000);
+     system("pause");
+}
+void Crucio(int *p)                               //钻心剜骨
+{   system("cls");
+    system("color 02");
+    printf("Lord Voldemort: Crucio!\n");
+    Sleep(1000);
+    int i=0;
+    for(;i<5;i++)
+    {
+        *p-=50;
+        printf("电流般的邪恶魔法摧残着你的内心，你的HP-50\n");
+        Sleep(600);
+    }system("pause");
+}
+void Imperio(int *p,int *r)                              //魂魄出窍
+{   *r=2;
+    *p-=1;
+    system("cls");
+    system("color 0D");
+    printf("Lord Voldemort: Imperio~\n");
+    system("pause");
+}
+void Avada_Kedavra(int *p)                        //啃大瓜
+{   system("cls");
+    system("color 72");
+    printf("Lord Voldemort: Avada Kedavra!!!!!!\n");
+    *p=1;
+    for(int i=0;i<3;i++)
+    {system("color 02");
+     Sleep(500);
+     printf("“啊！！！”\n");
+     system("color 72");
+     Sleep(500);
+    }system("color 0C");
+    printf("“索命咒”黑魔法师威力最高的魔法，一切生物，一击必死......但作为预言之子的你！仍有一缕意识！（HP减至1）\n");
+    system("pause");
+}
+void victory()
+{   printf("你，获胜了！\n");
+    Sleep(2000);
+    printf("伏地魔从魔法世界消失。。\n");
+    Sleep(2000);
+    printf("世人将你铭记");
+    Sleep(2000);
+    printf("或许，还有下一次危机出现\n");
+    Sleep(2000);
+    printf("但是，相信你，依然会回来做魔法界的英雄！！！\n");
+    system("pause");
+    system("cls");
+    printf("感谢体验！\n");
 }
