@@ -1,0 +1,849 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <Windows.h>
+#include <assert.h>
+#define M 10000                                                       //保证数字足够多
+struct character
+{
+    int b;                                                        //blood_value
+    int m;                                                       //magic_value
+    int s;                                                      //shield_value
+}p,v;                                                          //player和Lord Voldemort
+
+void HE_name(int n)                         //卡牌对应名
+{
+    char all[][100]={" ","Oppugno 万弹齐发(1)","Incendio 火焰熊熊(2)","Weasley Band 韦斯莱烟花(3)","Stupefy 昏昏倒地(1)","Expelliarmus 统统石化(2)","Time Turner 时光转换器(1)","Petrificus Totalus 除你武器(2)","Reducto 粉身碎骨(2)"};      //所有名称
+      printf("%s",all[n]);
+}
+
+int HE_judge(int *m,int n)                                  //蓝量判断,同时减去消耗的蓝量
+{
+    int result,in=*m;
+    switch(n)
+    {
+        case 1:*m-=1;break;
+        case 2:*m-=2;break;
+        case 3:*m-=3;break;
+        case 4:*m-=1;break;
+        case 5:*m-=2;break;
+        case 6:*m-=1;break;
+        case 7:*m-=2;break;
+        case 8:*m-=2;break;
+    }
+    if(*m>=0)
+    result=1;
+    if(*m<0)
+    {
+        *m=in;
+        result=0;
+    }
+    return result;
+}
+
+void gotoxy(int x, int y)//gaibian
+{
+    COORD pos; pos.X = x - 1; pos.Y = y - 1;			//COORD  为 Windows.h 中定义的一个结构体
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
+
+void fangdapingmu()  //全屏函数
+{
+    HANDLE HOUT = GetStdHandle(STD_OUTPUT_HANDLE);    //获得控制台句柄
+    COORD NewSize = GetLargestConsoleWindowSize(HOUT);//获得控制台最大坐标，坐标以字符数为单位
+    NewSize.X -= 1;
+    NewSize.Y -= 1;    //可以不加，不加时显示滚动条
+    SetConsoleScreenBufferSize(HOUT, NewSize); //设置控制台缓冲区大小
+
+    SMALL_RECT DisplayArea={0,0,0,0};
+    DisplayArea.Right = NewSize.X;
+    DisplayArea.Bottom = NewSize.Y;
+    SetConsoleWindowInfo(HOUT, TRUE, &DisplayArea);    //设置控制台大小
+
+    //控制台已经最大化，但是初始位置不在屏幕左上角，添加如下代码
+    HWND hwnd = GetConsoleWindow();
+    ShowWindow(hwnd, SW_MAXIMIZE);    //窗体最大化
+}
+void Character_animation1();
+void Character_animation2();
+void Character_animation3();
+void Character_animation4();
+
+void Golden_snitch(int *p,char name[10]);                       //角色卡牌
+void  Episkey(int *p,char name[10]);
+void  Accio(int *p,char name[10]);
+void  Expecto_patronus(int *p,char name[10]);
+void Sectumsempra(int *p,char name[10]);
+void  Orb_of_water(int *p,char name[10]);
+void  Oppugno(int *p,char name[10]);
+void  Stupefy(int *p,char name[10],int *r);
+void  Time_Turner(int *p,char name[10]);
+void  Weasley_Bang(int *p,char name[10]);
+void  Expelliarmus(int *p,char name[10],int *r);
+void  Petrificus_Totalus(int *p,char name[10],int *r);
+void  Reducto(int *p,char name[10]);
+void victory();
+void Crucio(int *p);                                           //Boss卡牌
+void Avada_Kedavra(int *p);
+void Imperio(int *p,int *r);
+
+int main()
+{
+    CONSOLE_FONT_INFOEX cfi;            //初始化字体大小为16
+    cfi.cbSize = sizeof cfi;
+    cfi.nFont = 0;
+    cfi.dwFontSize.X = 0;
+    cfi.dwFontSize.Y = 16;
+    cfi.FontFamily = FF_DONTCARE;
+    cfi.FontWeight = FW_NORMAL;
+    wcscpy(cfi.FaceName, L"Lucida Console");
+    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);//
+    fangdapingmu();//调用放大函数
+ srand(time(NULL));
+    system("color 07");
+	int i,q,s_b=1000,cho;
+	printf(" ------------------------------------------------------------------------------------------------------------------------\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                              Magic World                                                               |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                              制作组xxxxx                                                               |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+    printf("|                                             运行时请全屏运行                                                           |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+	printf("|                                                                                                                        |\n");
+	printf(" ------------------------------------------------------------------------------------------------------------------------\n");
+    system("pause");
+    system("cls");
+	printf("新手引导界面\n");
+	printf("欢迎来到魔法世界\n");
+	Sleep(800);
+	printf("没错没错，现在是喜闻乐见的新手教程环节\n");
+	Sleep(800);
+	printf("首先,让我们来熟悉下战斗环节\n");
+	Sleep(800);
+	printf("快看那是什么，一只野生的伏地魔残魂！一只野生的伏地魔出现了!让我们来战胜他\n");
+	Sleep(800);
+	printf("\n");
+	printf("palyer                                                                     Lord Voldemort(remnant soul)\n");
+    printf("血量:max                                                                   血量:%d/1000\n",s_b);
+    printf("魔力:4/8                                                                   魔力:0/0\n");
+    printf("\n");
+    printf("你的卡牌:\n");
+    printf("1 Incendio(1)\n");
+    printf("\n");
+    Sleep(800);
+    printf("现在让我们输入魔咒前的数字，进行咒语释放：");
+    repeat1:scanf("%d",&q);
+    if(q==1)
+    {
+     printf("player: Incendio!\n");
+     for(int i=0;i<3;i++)
+    {s_b-=600;
+     printf("熊熊的火焰在对手脚下灼烧，对手HP-600\n");
+     Sleep(200);}
+     s_b-=800;
+     printf("火焰最终的绽放！对手HP-800\n");}
+     else
+     {
+         printf("请输入正确字符继续进行游戏！");
+         goto repeat1;
+     }Sleep(1000);system("cls");
+    printf("\n");
+    printf("palyer                                                                     Lord Voldemort(remnant soul)\n");
+    printf("血量:max                                                                   血量:%d/1000\n",s_b);
+    printf("魔力:2/8                                                                   魔力:0/0\n");
+    printf("\n");
+    printf("你的卡牌:\n");
+    printf("1 Incendio\n");
+    Sleep(800);
+    printf("\n");
+    printf("相信你也注意到了当你使用卡牌以后，你的魔力值减少了,括号中的数字即为你魔力的消耗\n");
+    Sleep(800);
+    printf("注意，如果魔力值不足以释放你的魔咒，你本回合不会释放任何魔咒！\n");
+    Sleep(800);
+    printf("不过不用担心，每回合结束后，你都会自动回复两点魔力值\n");
+    Sleep(800);
+    printf("就像这样\n");
+    Sleep(1500);
+    printf("palyer                                                                     Lord Voldemort(remnant soul)\n");
+    printf("血量:max                                                                   血量:%d/1000\n",s_b);
+    printf("魔力:4/8                                                                   魔力:0/0\n");
+    printf("\n");
+    printf("你的卡牌:\n");
+    printf("1 Incendio\n");
+    printf("角色技能:\n");
+    printf("无\n");
+    Sleep(800);
+    printf("\n");
+    printf("其次便是这个突然出现的角色技能\n");
+    Sleep(800);
+    printf("它将在你抽取到人物后进行解锁，但每场战斗只能释放一次\n");
+    system("pause");
+    system("cls");
+    printf("啊，可恶，聊的太投入了，居然被他跑了，赶快追上去！\n");
+    Sleep(800);
+    printf("在这之前，先去找寻你同行的伙伴吧\n");
+    Sleep(800);
+    system("pause");
+    system("cls");
+	printf(" ---------------------------------------------------------------------------------------------------------\n");
+	printf("|  ------------------------ ------------------------ ------------------------ ------------------------                                                                   |\n");
+	printf("| |                        |                        |                        |$                      $|   |\n");
+	printf("| |                        |                        |                        | $                    $ |   |\n");
+	printf("| |                        |                        |                        |  $                  $  |   |\n");
+	printf("| |                        |                        |                        |   $ ______________ $   |   |\n");
+	printf("| |                        |                        |                        |    |              |    |   |\n");
+	printf("| |      Harry Potter      |    Hermione Granger    |  Aberforth Dumbledore  |    |Newt Scamander|    |   |\n");
+	printf("| |                        |                        |                        |    |              |    |   |\n");
+	printf("| |   拥有勇气与狮心的传奇 |                        |                        |    |  (敬请期待)  |    |   |\n");
+	printf("| | 男孩面对险境他总能保护 |                        |                        |    |______________|    |   |\n");
+	printf("| | 自己与伙伴！           |                        |                        |    $              $    |   |\n");
+	printf("| |                        |                        |                        |   $                $   |   |\n");
+	printf("| |                        |                        |                        |   $                $   |   |\n");
+	printf("| |                        |                        |                        |  $                  $  |   |\n");
+	printf("| |                        |                        |                        |  $                  $  |   |\n");
+	printf("| |                        |                        |                        | $                    $ |   |\n");
+    printf("| |                        |                        |                        | $                    $ |   |\n");
+	printf("| |                        |                        |                        |$                      $|   |\n");
+	printf("| |                        |                        |                        |$                      $|   |\n");
+	printf("| |                        |                        |                        |                        |   |\n");
+	printf("|  ------------------------ ------------------------ ------------------------ ------------------------    |\n");
+    printf("|  随机抽取一位人物开始你的冒险！                                                                         |\n");
+	printf(" ---------------------------------------------------------------------------------------------------------\n");
+    system("pause");
+    system("cls");
+    cho=rand()%4;
+    cho=1;
+    char all_name[4][20]={"Harry Potter","Hermione Granger","Newt Scamander","Aberforth Dumbledore"};
+    system("cls");
+    printf("%s将与你同行！\n",all_name[cho]);
+    Sleep(2500);
+    switch(cho)
+    {
+    case 0:Character_animation1();break;
+    case 1:Character_animation2();break;
+    case 2:Character_animation3();break;
+    case 3:Character_animation4();break;
+    }
+    printf("\n");
+    printf("有了值得信赖的伙伴同行，相信接下来的战斗会更加轻松\n");
+    Sleep(800);
+    printf("最后熟悉下你的卡牌，就正式上路吧\n");
+    system("pause");
+    system("cls");
+    switch(cho)
+    {
+    case 0:break;
+    case 1:Card1();break;
+    case 2:break;
+    case 3:break;
+    }
+    system("pause");
+    system("cls");
+    system("color 07");
+    printf("\n");                                                                           //卡牌介绍页面
+    printf("如果准备好了，那就开始吧！\n");
+    Sleep(800);
+    system("pause");
+    system("cls");
+    printf("\n经过几天的追寻，你终于发现了伏地魔，大战一触即发\n");
+    system("pause");
+    system("cls");
+    Hermione();
+}
+void Hermione()
+{
+    printf("Lord Voldemort:\n");
+    printf("Harry Potter:\n");
+    printf("Lord Voldemort:\n");
+    printf("Harry Potter:\n");
+    printf("Lord Voldemort:\n");
+    printf("Harry Potter:\n");
+    printf("Lord Voldemort:\n");
+    printf("Harry Potter:\n");                      //对话
+    srand(time(NULL));
+    int a[M],b[M];                               //a[]为玩家卡库里随机抽取卡号,b[]为Boss本轮使用卡号
+    long i=0;
+    int wu=0;
+    for(i=0;i<M;i++)
+    {
+        a[i]=rand()%8+1;                            //a[]玩家卡库排序
+        b[i]=rand()%3+1;                           //b[]Boss卡牌排序
+    }
+    p.b=2000,v.b=10000;
+    p.m=2,p.s=0,v.s=0;                        //初始值
+
+    int hand_card[4],j=4,k;
+    int part=1;
+    int choose;
+    int counter=1;
+    int round1=0;
+    int round2=0;
+    char role_name[]="Hermione",card_name[10];
+    int o;
+    for(i=0;i<4;i++)       //抽取的角色和卡牌名
+    {
+        hand_card[i]=rand()%8+1;
+        for(o=0;o>=0;o++)
+        {
+            if(hand_card[0]==hand_card[1])
+                hand_card[1]=rand()%8+1;
+            else break;
+        }
+        for(o=0;o>=0;o++)
+        {
+            if(hand_card[2]==hand_card[1]||hand_card[2]==hand_card[0])
+                hand_card[2]=rand()%8+1;
+                 else break;
+        }
+        for(o=0;o>=0;o++)
+        {
+            if(hand_card[3]==hand_card[2]||hand_card[3]==hand_card[1]||hand_card[3]==hand_card[0])
+                hand_card[3]=rand()%8+1;
+                 else break;
+        }
+    }
+
+    while (p.b>0&&v.b>0)
+    {   player:if(round1!=0)
+        {   round1--;
+           system("cls");
+           system("color 07");
+           printf("“啊......”痛苦的眩晕感侵袭了你\n（本回合跳过你的出牌阶段）\n");
+           Sleep (2000);
+           system("cls");
+           p.m+=2;
+           if(p.m>=8)
+           p.m=8;
+            goto boss;
+            }
+        if(round1==0)
+        {printf("第%d回合\n",part);
+        printf("%s                                                                      Lord Voldemort\n",role_name);
+        printf("血量:%d/2000                                                                血量:%d/10000\n",p.b,v.b);
+        printf("魔力:%d/8                                                                      魔力:max\n",p.m);
+        printf("你的卡牌:\n");
+        for(i=0;i<4;i++)                                                                //卡牌显示
+        {
+            printf("%d ",hand_card[i]);
+            HE_name(hand_card[i]);
+            printf("\n");
+        }
+        printf("角色技能");
+        printf("\n魔力精通(剩余次数:%d次)\n\n",counter);
+        printf("你的选择是:");
+        repeat:scanf("%d",&choose);
+        if(choose==hand_card[0]||choose==hand_card[1]||choose==hand_card[2]||choose==hand_card[3]||choose==0)             //卡牌使用
+        {
+            if(HE_judge(&p.m,choose))
+            {
+                    switch(choose)
+                    {
+                        case 1:Oppugno(&v.b,role_name);Sleep(400);break;
+                        case 4:Stupefy(&v.b,role_name,&round2);Sleep(400);break;
+                        case 6:Time_Turner(&p.b,role_name);Sleep(400);break;
+                        case 3:Weasley_Bang(&v.b,role_name);Sleep(400);break;
+                        case 7:Expelliarmus(&p.s,role_name,&round2);Sleep(400);break;
+                        case 5:Petrificus_Totalus(&v.b,role_name,&round2);Sleep(400);break;
+                        case 8:Reducto(&v.b,role_name);Sleep(400);break;
+                        case 2:Incendio(&v.b,role_name);Sleep(400);break;
+                        case 0:{if(choose==0&&counter==0)             //角色技能
+                            printf("你的技能使用次数已耗尽");
+                                else
+                                {   counter--;
+                                    int a;
+                                    printf("选择你要使用的卡牌编号：\n");
+                                    printf("1:Oppugno 万弹齐发\n");
+                                    printf("5:Stupefy 昏昏倒地\n");
+                                    printf("9:Time Turner 时光转换器\n");
+                                    printf("3:Weasley Bang 韦斯莱烟花\n");
+                                    printf("6:Expelliarmus 统统石化\n");
+                                    printf("10:Petrificus Totalus 除你武器 \n");
+                                    printf("14:Reducto 粉身碎骨\n");
+                                    printf("2:Incendio 火焰熊熊\n");
+                                    scanf("%d",&a);
+                                        switch(a)
+                                        {   case 1:Oppugno(&v.b,role_name);break;
+                                            case 5:Stupefy(&v.b,role_name,&round2);break;
+                                            case 9:Time_Turner(&p.b,role_name);break;
+                                            case 3:Weasley_Bang(&v.b,role_name);break;
+                                            case 6:Expelliarmus(&p.s,role_name,&round2);break;
+                                            case 10:Petrificus_Totalus(&v.b,role_name,&round2);break;
+                                            case 14:Reducto(&v.b,role_name);break;
+                                            case 2:Incendio(&v.b,role_name);break;
+                                        }
+                                    }
+                            }break;}
+            }
+            else
+            {
+                 printf("魔力不足");
+                 Sleep(800);
+            }
+        }
+        else
+        {
+            printf("无此魔咒，请重新输入");
+            choose=0;
+            goto repeat;
+        }
+        for(i=0;i<4;i++)                                                                                      //卡牌抽取
+        {
+            if(hand_card[i]==choose)
+            {
+                k=i;break;
+            }
+        }
+        for(o=0;o<4;o++)
+            a[o]=hand_card[o];
+        hand_card[k]=rand()%8+1;
+        for(o=0;o>=0;o++)
+        {
+            if(hand_card[k]==a[0]||hand_card[k]==a[1]||hand_card[k]==a[2]||hand_card[k]==a[3])
+            hand_card[k]=rand()%8+1;
+            else break;
+        } p.m+=1;
+       if(p.m>=8)
+        p.m=8;
+        j++;}
+    if(v.b<=0)
+    {victory();
+    return 0;}
+    boss:if(round2!=0)
+    {   round2--;
+        system("cls");
+        system("color 07");
+        printf("对方并没有展开行动\n对手的眩晕回合减少一回合...\n");
+        Sleep(2000);
+        system("cls");
+        part++;
+            goto player;}
+        if(round2==0)
+        {system("cls");
+    system("color 02");
+    printf("Lord Voldemort:现在，轮到我来掌握魔法了！\n(现在是对方的回合）\n");
+    system("pause");
+    part++;
+    srand(time(NULL));
+   long num;
+   num=rand()%100;
+   if(num>=96&&num<=99)
+   {
+       Avada_Kedavra(&p.b);
+    }
+   else if(num>=0&&num<=59)
+   {
+       Crucio(&p.b);
+     }
+   else{
+       Imperio(&p.m,&round1);
+       }
+       system("cls");
+       system("color 07");
+    }}
+    if(p.b<=0)
+    printf("你被打败了");
+}
+
+void Card1()
+{   system("color 0C");
+    printf("\n赫敏·格兰杰\nOppugno! 万弹齐发 :6*-150 漫天金色的飞鸟向对手冲去，持续6秒，每秒造成伤害150\nIncendio! :火焰熊熊 3*-600， 1*-800 熊熊火焰从对手脚下喷薄而出，持续3秒，每秒造成伤害600，最后火焰转为火焰漩涡，造成伤害800\nStupefy! :昏昏倒地 对手失去行动力！使用此牌，对手失去一轮对战的出牌权，你可以继续出牌攻击\nTime~Turner! :时光回溯 +800 时光倒流，状态回复到战斗前的样子，起到治疗效果，自身HP+800\nExpelliarmus! :除你武器 为数不多的能与“索命咒”抗衡的手段，禁锢住对手，让其失去两轮对战的出牌权\nPetrificus Totalus! :统统石化 -800  石甲从地面开始生长，将对手包裹，束缚，使其失去一回合的行动能力，并同时造成800的伤害\nReducto! :粉身碎骨 -1500  对手的身体被魔法的力量不断冲击，催折，造成总共1000的伤害\nWeasley! Bang! :韦斯莱烟花 4*-200，1*-2000 绚烂的烟花在对手上方绽放，持续4秒；每秒造成200的伤害。韦斯莱家独门烟花的最后一击，烟花幻化成金色的龙头，将对手吞没，扣除对手血量2000\n");
+}
+void Character_animation1()
+{
+
+    long i;								//创建变量 i，用于存储（.txt）文件个数
+    char FileName[100];					//创建数组 FileName[]，用于存储文件名称，文件名称最大不超过100个符号
+    char hi[300000];					//这里是字符数组，用于存储从文件读取出的字符串
+    FILE *in;							//定义一个FILE类型的结构体指针 in
+
+    CONSOLE_FONT_INFOEX cfi;            //初始化字体大小为8
+    cfi.cbSize = sizeof cfi;
+    cfi.nFont = 0;
+    cfi.dwFontSize.X = 0;
+    cfi.dwFontSize.Y = 8;
+    cfi.FontFamily = FF_DONTCARE;
+    cfi.FontWeight = FW_NORMAL;
+    wcscpy(cfi.FaceName, L"Lucida Console");
+    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+    fangdapingmu();                            //SetCurrentConsoleFontEx函数导致屏幕缩小，调用函数变为全屏
+    //循环将.txt文件中的符号打印在控制窗口中，打印完接着打印下一个.txt文件
+    //放幻灯片，Sleep()函数调节播放速度
+    for (i = 0; i <= 129; i++)//i 的范围转换为(.txt)文件的个数
+    {
+        sprintf(FileName,
+                "HA/hary(%d).txt", i);
+
+        in = fopen(FileName, "r");
+        assert(in != NULL);		//断言结构体指针 in 不为空
+
+        fread(hi, 1, 300000, in);//改 ,这是你一个TXT文件里的字符串.
+
+        printf("%s\n%d", hi, i);
+        gotoxy(1, 1);			//每次打印完，将光标移动到最前面，使下次打印依然在开头开始打印
+        Sleep(30);//等待27毫秒执行
+        fclose(in);
+
+
+    }
+    cfi.dwFontSize.Y = 16;                       //再次改变字体大小
+    wcscpy(cfi.FaceName, L"Lucida Console");
+    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+    fangdapingmu();                                      //最大化屏幕
+    system("cls");
+    getchar();
+}
+
+                               //抽取人物的动画
+void Character_animation2()
+{
+
+    long i;								//创建变量 i，用于存储（.txt）文件个数
+    char FileName[100];					//创建数组 FileName[]，用于存储文件名称，文件名称最大不超过100个符号
+    char hi[300000];					//这里是字符数组，用于存储从文件读取出的字符串
+    FILE *in;							//定义一个FILE类型的结构体指针 in
+
+    CONSOLE_FONT_INFOEX cfi;            //初始化字体大小为8
+    cfi.cbSize = sizeof cfi;
+    cfi.nFont = 0;
+    cfi.dwFontSize.X = 0;
+    cfi.dwFontSize.Y = 8;
+    cfi.FontFamily = FF_DONTCARE;
+    cfi.FontWeight = FW_NORMAL;
+    wcscpy(cfi.FaceName, L"Lucida Console");
+    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+    fangdapingmu();                            //SetCurrentConsoleFontEx函数导致屏幕缩小，调用函数变为全屏
+    //循环将.txt文件中的符号打印在控制窗口中，打印完接着打印下一个.txt文件
+    //放幻灯片，Sleep()函数调节播放速度
+    for (i = 0; i <= 211; i++)//i 的范围转换为(.txt)文件的个数
+    {
+        sprintf(FileName,
+                "HE/he(%d).txt", i);
+
+        in = fopen(FileName, "r");
+        assert(in != NULL);		//断言结构体指针 in 不为空
+
+        fread(hi, 1, 300000, in);//改 ,这是你一个TXT文件里的字符串.
+
+        printf("%s\n%d", hi, i);
+        gotoxy(1, 1);			//每次打印完，将光标移动到最前面，使下次打印依然在开头开始打印
+        Sleep(30);//等待27毫秒执行
+        fclose(in);
+
+
+    }
+    cfi.dwFontSize.Y = 16;                       //再次改变字体大小
+    wcscpy(cfi.FaceName, L"Lucida Console");
+    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+    fangdapingmu();                                      //最大化屏幕
+    system("cls");
+    getchar();
+}
+void Character_animation3()
+{
+
+    long i;								//创建变量 i，用于存储（.txt）文件个数
+    char FileName[100];					//创建数组 FileName[]，用于存储文件名称，文件名称最大不超过100个符号
+    char hi[300000];					//这里是字符数组，用于存储从文件读取出的字符串
+    FILE *in;							//定义一个FILE类型的结构体指针 in
+
+    CONSOLE_FONT_INFOEX cfi;            //初始化字体大小为8
+    cfi.cbSize = sizeof cfi;
+    cfi.nFont = 0;
+    cfi.dwFontSize.X = 0;
+    cfi.dwFontSize.Y = 8;
+    cfi.FontFamily = FF_DONTCARE;
+    cfi.FontWeight = FW_NORMAL;
+    wcscpy(cfi.FaceName, L"Lucida Console");
+    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+    fangdapingmu();                            //SetCurrentConsoleFontEx函数导致屏幕缩小，调用函数变为全屏
+    //循环将.txt文件中的符号打印在控制窗口中，打印完接着打印下一个.txt文件
+    //放幻灯片，Sleep()函数调节播放速度
+    for (i = 0; i <= 262; i++)//i 的范围转换为(.txt)文件的个数
+    {
+        sprintf(FileName,
+                "NIU/niu(%d).txt", i);
+
+        in = fopen(FileName, "r");
+        assert(in != NULL);		//断言结构体指针 in 不为空
+
+        fread(hi, 1, 300000, in);//改 ,这是你一个TXT文件里的字符串.
+
+        printf("%s\n%d", hi, i);
+        gotoxy(1, 1);			//每次打印完，将光标移动到最前面，使下次打印依然在开头开始打印
+        Sleep(30);//等待27毫秒执行
+        fclose(in);
+
+
+    }
+    cfi.dwFontSize.Y = 16;                       //再次改变字体大小
+    wcscpy(cfi.FaceName, L"Lucida Console");
+    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+    fangdapingmu();                                      //最大化屏幕
+    system("cls");
+    getchar();
+}
+void Character_animation4()
+{
+
+    long i;								//创建变量 i，用于存储（.txt）文件个数
+    char FileName[100];					//创建数组 FileName[]，用于存储文件名称，文件名称最大不超过100个符号
+    char hi[300000];					//这里是字符数组，用于存储从文件读取出的字符串
+    FILE *in;							//定义一个FILE类型的结构体指针 in
+
+    CONSOLE_FONT_INFOEX cfi;            //初始化字体大小为8
+    cfi.cbSize = sizeof cfi;
+    cfi.nFont = 0;
+    cfi.dwFontSize.X = 0;
+    cfi.dwFontSize.Y = 8;
+    cfi.FontFamily = FF_DONTCARE;
+    cfi.FontWeight = FW_NORMAL;
+    wcscpy(cfi.FaceName, L"Lucida Console");
+    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+    fangdapingmu();                            //SetCurrentConsoleFontEx函数导致屏幕缩小，调用函数变为全屏
+    //循环将.txt文件中的符号打印在控制窗口中，打印完接着打印下一个.txt文件
+    //放幻灯片，Sleep()函数调节播放速度
+    for (i = 0; i <= 332; i++)//i 的范围转换为(.txt)文件的个数
+    {
+        sprintf(FileName,
+                "DENG/deng(%d).txt", i);
+
+        in = fopen(FileName, "r");
+        assert(in != NULL);		//断言结构体指针 in 不为空
+
+        fread(hi, 1, 300000, in);//改 ,这是你一个TXT文件里的字符串.
+
+        printf("%s\n%d", hi, i);
+        gotoxy(1, 1);			//每次打印完，将光标移动到最前面，使下次打印依然在开头开始打印
+        Sleep(30);//等待27毫秒执行
+        fclose(in);
+
+
+    }
+    cfi.dwFontSize.Y = 16;                       //再次改变字体大小
+    wcscpy(cfi.FaceName, L"Lucida Console");
+    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+    fangdapingmu();                                      //最大化屏幕
+    system("cls");
+    getchar();
+}
+
+void Golden_snitch(int *p,char name[10])              //金色飞贼    0
+{
+    system("cls");
+    system("color 06");
+    *p+=2;
+    printf("%s: Golden snitch!\n",name);
+    Sleep(1000);
+    printf("这是最珍贵的游走球！\n",name);
+    Sleep(1000);
+    printf("活力泉涌！魔力值+2\n",name);
+    Sleep(1000);
+}
+void  Episkey(int *p,char name[10])                      //愈合如初     1
+{
+    system("cls");
+    system("color 02");
+    *p+=500;
+    printf("%s: Episkey!\n",name);
+    Sleep(1000);
+    printf("战斗的疲惫降低了！HP+500\n");
+    Sleep(1000);
+}
+void  Accio(int *p,char name[10])                      //飞来咒    2
+{
+    system("cls");
+    system("color 0F");
+    *p-=1000;
+    printf("%s: Accio!\n",name);
+    Sleep(1000);
+    printf("无形之手扼住了对面Hp-500\n");
+    Sleep(1000);
+    printf("急速的飞行冲昏了对方。\n他失去两回合的施法能力！");
+    Sleep(1000);
+}
+void  Expecto_patronus(int *p,char name[10])        //呼神护卫  2
+{   system("cls");
+    system("color 03");
+    *p+=1000;
+    printf("%s: Expecto patronus!\n",name);
+    Sleep(1000);
+    printf("神鹿化作光围绕着我！护盾量+1000\n");
+    Sleep(1000);
+}
+void Sectumsempra(int *p,char name[10])                   //神锋无影   2
+{
+    system("cls");
+    system("color 0F");
+    int i=0;
+    printf("%s: Sectumsempra!\n",name);
+    Sleep(1000);
+    for(;i<4;i++)
+    {
+        *p-=500;
+        printf("凌冽的刀光切割了对手！对方HP-500\n");
+        Sleep(1000);
+    }Sleep(1000);
+}
+void  Orb_of_water(int *p,char name[10])        //水牢    3
+{
+    system("cls");
+    system("color 01");
+    printf("%s: Orb_of_water!\n",name);
+    Sleep(1000);
+    for(int i=0;i<4;i++)
+    {*p-=300;
+     printf("水流将对方缠绕！对手HP-300\n");
+     Sleep(1000);}
+     printf("水化作牢笼！（禁锢对手三回合）");
+     Sleep(1000);}
+void Oppugno(int *p,char name[10])           //万弹齐发  1
+{
+    system("cls");
+    system("color 06");
+    int i=0;
+    printf("%s; Oppugno!\n",name);
+    for(;i<8;i++)
+    {
+        *p-=150;
+        printf("金色的飞鸟冲向了恶魔，对手HP-150\n");
+        Sleep(200);}
+    system("pause");
+}
+void  Stupefy(int *p,char name[10],int *r)             //昏昏倒地  1
+ {   *r=1;
+     system("cls");
+     system("color 0D");
+     printf("%s: Stupefy!\n",name);
+     printf("对手失去了行动力！\n");
+     system("pause");
+ }
+void  Time_Turner(int *p,char name[10])      //时间转换器  1
+{   system("cls");
+    system("color 0F");
+    printf("%s: Time~Turner!\n",name);
+    for(int i=0;i<4;i++)
+    {*p+=100;
+     printf("时~光~回~溯~\n");
+     Sleep(200);}
+     printf("恢复了健康的状态！HP+800\n");
+    system("pause");
+}
+void Incendio(int *p,char name[10])          //火焰熊熊  2
+ {   system("cls");
+     system("color 04");
+     printf("%s: Incendio!\n",name);
+     for(int i=0;i<3;i++)
+    {*p-=600;
+     printf("熊熊的火焰在对手脚下灼烧，对手HP-600\n");
+     Sleep(200);}
+     *p-=800;
+     printf("火焰最终的绽放！对手HP-800\n");
+     system("pause");
+ }
+void  Expelliarmus(int *p,char name[10],int *r)         //除你武器  2
+ {   *r=2;
+     system("cls");
+     system("color 0C");
+     printf("%s: Expelliarmus!\n",name);
+     printf("“你被缴械了！”\n");
+     system("pause");
+ }
+void  Petrificus_Totalus(int *p,char name[10],int *r)         //统统石化  2
+ {   *r=1;
+     system("cls");
+     system("color 0D");
+     *p-=800;
+     printf("%s: Petrificus Totalus!\n",name);
+     printf("对方变成了？一尊石像！（对手HP-800）\n");
+     system("pause");
+ }
+void  Reducto(int *p,char name[10])        //粉身碎骨   2
+{
+    system("cls");
+    system("color 0F");
+    printf("%s: Reducto!\n",name);
+   for(int i=0;i<5;i++)
+    {*p-=150;
+     printf("嘎达,嘎达,嘎....\n");
+     Sleep(150);
+     *p-=150;
+     printf("嗙，砰，DuangDuangDuang....\n");
+     Sleep(150);}
+    printf("\n对手HP-1500\n这个魔法仿佛有搅碎对手的力量。\n");
+    system("pause");
+}
+void  Weasley_Bang(int *p,char name[10])         //韦斯莱烟花  3
+{   system("cls");
+    system("color 06");
+    printf("%s: Weasley! Bang!\n",name);
+    for(int i=0;i<4;i++)
+    {*p-=200;
+     printf("烟花在空气中爆炸，对手HP-200\n");
+     Sleep(100);}
+     Sleep(500);
+     *p-=2000;
+     printf("“烟花龙头”炸开了空气！！！对手HP-2000\n");
+     system("pause");
+}
+void Crucio(int *p)                               //钻心剜骨
+{   system("cls");
+    system("color 02");
+    printf("Lord Voldemort: Crucio!\n");
+    Sleep(1000);
+    int i=0;
+    for(;i<5;i++)
+    {
+        *p-=50;
+        printf("电流般的邪恶魔法摧残着你的内心，你的HP-50\n");
+        Sleep(600);
+    }system("pause");
+}
+void Imperio(int *p,int *r)                              //魂魄出窍
+{   *r=2;
+    *p-=1;
+    system("cls");
+    system("color 0D");
+    printf("Lord Voldemort: Imperio~\n");
+    system("pause");
+}
+void Avada_Kedavra(int *p)                        //啃大瓜
+{   system("cls");
+    system("color 72");
+    printf("Lord Voldemort: Avada Kedavra!!!!!!\n");
+    *p=1;
+    for(int i=0;i<3;i++)
+    {system("color 02");
+     Sleep(500);
+     printf("“啊！！！”\n");
+     system("color 72");
+     Sleep(500);
+    }system("color 0C");
+    printf("“索命咒”黑魔法师威力最高的魔法，一切生物，一击必死......但作为预言之子的你！仍有一缕意识！（HP减至1）\n");
+    system("pause");
+}
+void victory()
+{   printf("你，获胜了！\n");
+    Sleep(2000);
+    printf("伏地魔从魔法世界消失。。\n");
+    Sleep(2000);
+    printf("世人将你铭记");
+    Sleep(2000);
+    printf("或许，还有下一次危机出现\n");
+    Sleep(2000);
+    printf("但是，相信你，依然会回来做魔法界的英雄！！！\n");
+    system("pause");
+    system("cls");
+    printf("感谢体验！\n");
+}
